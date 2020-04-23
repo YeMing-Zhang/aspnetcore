@@ -6,7 +6,9 @@
 
     <PropertyGroup>
       <_ServiceWorkerAssetsManifestIntermediateOutputPath>$(_BlazorIntermediateOutputPath)$(ServiceWorkerAssetsManifest)</_ServiceWorkerAssetsManifestIntermediateOutputPath>
-      <_ServiceWorkerAssetsManifestFullPath>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/$(_ServiceWorkerAssetsManifestIntermediateOutputPath)'))</_ServiceWorkerAssetsManifestFullPath>
+      <!--If a user has set their own IntermediateBasePath, that path will already be rooted so we don't need turn it into a full path.-->
+      <_ServiceWorkerAssetsManifestFullPath Condition="$([System.IO.Path]::IsPathFullyQualified('$(_ServiceWorkerAssetsManifestIntermediateOutputPath)'))">$(_ServiceWorkerAssetsManifestIntermediateOutputPath)</_ServiceWorkerAssetsManifestFullPath>
+      <_ServiceWorkerAssetsManifestFullPath Condition="'$(_ServiceWorkerAssetsManifestFullPath)' == ''">$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/$(_ServiceWorkerAssetsManifestIntermediateOutputPath)'))</_ServiceWorkerAssetsManifestFullPath>
     </PropertyGroup>
 
     <ItemGroup>
